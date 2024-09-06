@@ -5420,7 +5420,7 @@ static void cmod_free(void *val) {
  *   cmod = Imlib2::ColorModifier.new
  *
  */
-VALUE cmod_new(VALUE klass) {
+VALUE cmod_new(int argc, VALUE *argv, VALUE klass) {
   Imlib_Color_Modifier *cmod;
   VALUE self;
 
@@ -5438,7 +5438,7 @@ VALUE cmod_new(VALUE klass) {
  * This method takes no arguments.
  * 
  */
-static VALUE cmod_init(VALUE self) {
+static VALUE cmod_init(int argc, VALUE *argv, VALUE self) {
   return self;
 }
 
@@ -6054,7 +6054,7 @@ static VALUE poly_bounds(VALUE self) {
  *   end
  *
  */
-static VALUE poly_contains(int argc, char *argv, VALUE self) {
+static VALUE poly_contains(int argc, VALUE *argv, VALUE self) {
   ImlibPolygon *poly;
   int x, y;
 
@@ -7847,7 +7847,7 @@ void Init_imlib2() {
   cGradient = rb_define_class_under(mImlib2, "Gradient", rb_cObject);
   rb_define_singleton_method(cGradient, "new", gradient_new, -1);
   rb_define_method(cGradient, "initialize", gradient_init, -1);
-  rb_define_method(cGradient, "add_color", gradient_add_color, 2);
+  rb_define_method(cGradient, "add_color", gradient_add_color, -1);
 
   /* hack: alias should work with modules and classes as well :) */
   /* disabled: this breaks with Rails (and probably other stuff */
@@ -7870,8 +7870,8 @@ void Init_imlib2() {
   /* workarounds */
   rb_define_singleton_method(cImage, "draw_pixel_workaround?", image_dp_workaround, 0);
   rb_define_singleton_method(cImage, "bypass_draw_pixel?", image_dp_workaround, 0);
-  rb_define_singleton_method(cImage, "draw_pixel_workaround=", image_dp_workaround, 1);
-  rb_define_singleton_method(cImage, "bypass_draw_pixel=", image_dp_workaround, 1);
+  rb_define_singleton_method(cImage, "draw_pixel_workaround=", image_set_dp_workaround, 1);
+  rb_define_singleton_method(cImage, "bypass_draw_pixel=", image_set_dp_workaround, 1);
 
   /* create methods */
   rb_define_singleton_method(cImage, "create", image_new, 2);
@@ -8037,9 +8037,9 @@ void Init_imlib2() {
   rb_define_method(cImage, "script_filter", image_script_filter, 1);
 
   /* color modifier methods */
-  rb_define_method(cImage, "apply_color_modifier", image_apply_cmod, 1);
-  rb_define_method(cImage, "apply_cmod", image_apply_cmod, 1);
-  rb_define_method(cImage, "apply", image_apply_cmod, 1);
+  rb_define_method(cImage, "apply_color_modifier", image_apply_cmod, -1);
+  rb_define_method(cImage, "apply_cmod", image_apply_cmod, -1);
+  rb_define_method(cImage, "apply", image_apply_cmod, -1);
 
   rb_define_method(cImage, "attach_value", image_attach_val, 2);
   rb_define_method(cImage, "get_attached_value", image_get_attach_val, 1);
